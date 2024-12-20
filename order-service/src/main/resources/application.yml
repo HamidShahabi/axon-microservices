@@ -9,12 +9,28 @@ spring:
       enabled: true
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
 
+logging:
+  level:
+    org.axonframework: DEBUG
 axon:
+  eventhandling:
+    processors:
+      SagaProcessor:
+        mode: tracking
+  saga:
+    store: jpa
   axonserver:
     servers: localhost:8124
+    context: default
+    component-name: order-service
+    enabled: true
+  serializer:
+    general: jackson
+
+
 
 server:
   port: 8081
