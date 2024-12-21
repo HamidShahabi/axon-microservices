@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://payment-db:5432/paymentdb
+    username: paymentuser
+    password: paymentpassword
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+logging:
+  level:
+    org.axonframework: DEBUG
+axon:
+  axonserver:
+    servers: axon-server:8124
+    context: default
+    component-name: payment-service
+  serializer:
+    general: jackson
+
+
+server:
+  port: 8083

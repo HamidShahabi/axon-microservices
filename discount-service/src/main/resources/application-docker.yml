@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://discount-db:5432/discountdb
+    username: discountuser
+    password: discountpassword
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+logging:
+  level:
+    org.axonframework: DEBUG
+axon:
+  axonserver:
+    servers: axon-server:8124
+    context: default
+    component-name: discount-service
+  serializer:
+    general: jackson
+
+
+server:
+  port: 8082

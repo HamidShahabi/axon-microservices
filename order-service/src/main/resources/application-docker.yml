@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://order-db:5432/orderdb
+    username: orderuser
+    password: orderpassword
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    org.org.axonframework: INFO
+axon:
+  eventhandling:
+    processors:
+      SagaProcessor:
+        mode: tracking
+  saga:
+    store: jpa
+  axonserver:
+    servers: axon-server:8124
+    context: default
+    component-name: order-service
+    enabled: true
+  serializer:
+    general: jackson
+
+
+
+server:
+  port: 8081
