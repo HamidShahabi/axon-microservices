@@ -20,7 +20,7 @@ public class OrderSaga {
     @Autowired
     private transient CommandGateway commandGateway;
 
-    private double orderAmount;
+    private Double orderAmount;
 
     @StartSaga
     @SagaEventHandler(associationProperty = "orderId")
@@ -47,8 +47,10 @@ public class OrderSaga {
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Association value for 'orderId' not found"));
 
+        double discountedAmount = this.orderAmount - (this.orderAmount * event.percentage() / 100);
+
         // Now that discount is reserved, request payment
-        requestPayment(orderId, orderAmount);
+        requestPayment(orderId, discountedAmount);
     }
 
     @SagaEventHandler(associationProperty = "discountCode")
@@ -96,11 +98,13 @@ public class OrderSaga {
         commandGateway.send(new CancelOrderCommand(orderId));
     }
 
+    @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
     public void on(OrderConfirmedEvent event) {
         SagaLifecycle.end();
     }
 
+    @EndSaga
     @SagaEventHandler(associationProperty = "orderId")
     public void on(OrderCancelledEvent event) {
         SagaLifecycle.end();
@@ -108,5 +112,13 @@ public class OrderSaga {
 
     private void requestPayment(String orderId, double amount) {
         commandGateway.send(new RequestPaymentCommand(orderId, amount));
+    }
+
+    public Double getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(Double orderAmount) {
+        this.orderAmount = orderAmount;
     }
 }
