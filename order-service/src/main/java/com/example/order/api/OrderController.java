@@ -1,10 +1,13 @@
 package com.example.order.api;
 
 import com.example.order.aggregate.model.OrderQueryModel;
+import com.example.order.query.OrderEntity;
+import com.example.order.query.OrderRepository;
 import com.example.shared.order.commands.CreateOrderCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,12 +16,11 @@ import java.util.UUID;
 public class OrderController {
 
     private final CommandGateway commandGateway;
-    private final OrderQueryModel orderQueryModel;
+    private final OrderRepository repository;
 
-
-    public OrderController(CommandGateway commandGateway, OrderQueryModel orderQueryModel) {
+    public OrderController(CommandGateway commandGateway, OrderRepository repository) {
         this.commandGateway = commandGateway;
-        this.orderQueryModel = orderQueryModel;
+        this.repository = repository;
     }
 
     @PostMapping
@@ -29,8 +31,13 @@ public class OrderController {
     }
 
     @GetMapping
-    public Map<String, String> getAllOrders() {
-        return orderQueryModel.getOrders();
+    public List<OrderEntity> getAllOrders() {
+        return repository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public OrderEntity getOrderById(@PathVariable String id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
     }
     record CreateOrderRequest(String orderId, String discountCode, double amount) {}
 }
