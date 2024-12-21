@@ -16,18 +16,20 @@ public class DiscountAggregate {
     @AggregateIdentifier
     private String discountCode;
     private int availableCount;
+    private double percentage;
 
     protected DiscountAggregate(){}
 
     @CommandHandler
     public DiscountAggregate(CreateDiscountCommand cmd) {
-        apply(new DiscountCreatedEvent(cmd.discountCode(), cmd.initialCount()));
+        apply(new DiscountCreatedEvent(cmd.discountCode(), cmd.initialCount(), cmd.percentage()));
     }
 
     @EventSourcingHandler
     public void on(DiscountCreatedEvent event) {
         this.discountCode = event.discountCode();
         this.availableCount = event.initialCount();
+        this.percentage = event.percentage();
     }
 
     @CommandHandler
@@ -35,7 +37,7 @@ public class DiscountAggregate {
         if (availableCount <= 0) {
             apply(new DiscountReservationFailedEvent(discountCode));
         } else {
-            apply(new DiscountReservedEvent(discountCode));
+            apply(new DiscountReservedEvent(discountCode, percentage));
         }
     }
 

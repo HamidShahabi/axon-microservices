@@ -19,7 +19,7 @@ public class DiscountController {
     @PostMapping
     public String createDiscount(@RequestBody CreateDiscountRequest request) {
         String discountCode = request.discountCode() != null ? request.discountCode() : UUID.randomUUID().toString();
-        commandGateway.send(new CreateDiscountCommand(discountCode, request.initialCount()));
+        commandGateway.send(new CreateDiscountCommand(discountCode, request.initialCount(), request.percentage()));
         return "Discount created with code: " + discountCode;
     }
 

@@ -1,4 +1,4 @@
 package com.example.shared.discount.events;
 
-public record DiscountCreatedEvent(String discountCode, int initialCount) {}
+public record DiscountCreatedEvent(String discountCode, int initialCount, double percentage) {}
 
