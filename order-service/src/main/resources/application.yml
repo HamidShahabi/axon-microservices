@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:orderdb;DB_CLOSE_DELAY=-1
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:postgresql://localhost:5432/axon
+    username: postgres
+    password: hamidreza80
+    driver-class-name: org.postgresql.Driver
   h2:
     console:
       enabled: true
