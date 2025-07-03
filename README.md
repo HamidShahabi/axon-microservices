@@ -44,6 +44,11 @@ The system is designed to:
 3. **Discount Service**:
    - Manages discount codes and their availability.
 
+4. **Restaurant Service**:
+   - Manages restaurant information and location-based search.
+   - Implements BasicAuth for secure access.
+   - Provides geospatial query capabilities for finding nearby restaurants.
+
 ### Key Concepts
 - **Event Sourcing**: All state changes are captured as a sequence of events.
 - **CQRS**: Queries and commands are handled separately for scalability.
@@ -76,6 +81,18 @@ The system is designed to:
 - **Endpoints**:
   - `POST /discounts` - Create a discount.
   - `GET /discounts/{code}` - Retrieve discount details.
+
+### **4. Restaurant Service**
+- **Responsibilities**:
+  - Manage restaurant information.
+  - Provide location-based restaurant search.
+- **Endpoints**:
+  - `GET /restaurants` - Retrieve all active restaurants.
+  - `GET /restaurants/{id}` - Retrieve restaurant details by ID.
+  - `POST /restaurants` - Create a new restaurant.
+  - `GET /restaurants/near` - Find restaurants near a given location.
+- **Authentication**: BasicAuth (restaurant-user/restaurant-pass or admin/admin-pass)
+- **Port**: 8084
 
 ---
 
@@ -127,12 +144,22 @@ The system is designed to:
      cd order-service
      mvn spring-boot:run
      ```
-   Repeat for `discount-service` and `payment-service`.
+   Repeat for `discount-service`, `payment-service`, and `restaurant-service`.
 
 4. **Access APIs**:
    - **Order Service**: `http://localhost:8081`
    - **Discount Service**: `http://localhost:8082`
    - **Payment Service**: `http://localhost:8083`
+   - **Restaurant Service**: `http://localhost:8084` (BasicAuth: restaurant-user/restaurant-pass)
+
+5. **Test Restaurant Service**:
+   ```bash
+   # Get all restaurants
+   curl -u restaurant-user:restaurant-pass http://localhost:8084/restaurants
+   
+   # Find nearby restaurants
+   curl -u restaurant-user:restaurant-pass "http://localhost:8084/restaurants/near?latitude=40.7128&longitude=-74.0060&radiusKm=5"
+   ```
 
 ---
 

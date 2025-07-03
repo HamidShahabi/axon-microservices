@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+logging:
+  level:
+    org.axonframework: DEBUG
+    com.example.restaurant: DEBUG
+
+axon:
+  eventhandling:
+    processors:
+      RestaurantProcessor:
+        mode: tracking
+  axonserver:
+    servers: localhost:8124
+    context: default
+    component-name: restaurant-service
+    enabled: false
+  serializer:
+    general: jackson
+
+server:
+  port: 8084
