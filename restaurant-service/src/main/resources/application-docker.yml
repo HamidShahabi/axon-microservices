@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/axon
+    username: postgres
+    password: hamidreza80
+
+axon:
+  axonserver:
+    servers: axonserver:8124
+
+server:
+  port: 8084
